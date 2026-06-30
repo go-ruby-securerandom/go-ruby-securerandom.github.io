@@ -1,0 +1,31 @@
+baseURL = "https://go-ruby-securerandom.github.io/"
+title = "go-ruby-securerandom"
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[params.phases]]
+  name = "Encoders"
+  status = "ready"
+  blurb = "`Hex(n)`, `Base64(n)`, `UrlsafeBase64(n, padding)` and `RandomBytes(n)` with MRI's defaults (`n = 16`; URL-safe base64 unpadded unless asked). Hex is SIMD-accelerated via go-simd/hex; the base64 family via go-simd/base64."
+[[params.phases]]
+  name = "UUIDs (v4 & v7)"
+  status = "ready"
+  blurb = "`Uuid()` is an RFC 4122 version-4 UUID with the exact `xxxxxxxx-xxxx-4xxx-yxxx-…` layout (version nibble `4`, variant `8`/`9`/`a`/`b`). `UuidV7()` is MRI 4.0's version-7 UUID: a 48-bit big-endian Unix-milliseconds prefix from an injectable clock plus random bits."
+[[params.phases]]
+  name = "Alphanumeric & random_number"
+  status = "ready"
+  blurb = "`Alphanumeric(n, chars…)` builds from MRI's `A-Z a-z 0-9` default (or a supplied set) with the same `Random::Formatter#choose` base-`size` construction. `RandomNumber` returns a `Float` in `[0,1)` for no/non-positive `n`, an `Integer` in `[0,n)` for a positive integer, a `Float` in `[0,n)` for a positive float."
+[[params.phases]]
+  name = "SIMD acceleration"
+  status = "ready"
+  blurb = "The hex path runs on [go-simd/hex](https://github.com/go-simd/hex) and the base64 paths on [go-simd/base64](https://github.com/go-simd/base64) — go-asmgen kernels that are byte-identical drop-ins for the standard library, a CGO=0 SIMD path across all six 64-bit Go arches."
+[[params.phases]]
+  name = "The RandSource seam"
+  status = "ready"
+  blurb = "Every method draws from an injectable `RandSource` (default `crypto/rand`); a fixed source makes the formatters deterministic, which is how the suite asserts exact bytes. Randomness is the only non-deterministic input; all encoding and layout is pure formatting."
+[[params.phases]]
+  name = "Differential oracle & coverage"
+  status = "ready"
+  blurb = "Each method is run under the system `ruby` and checked for the same format, length, charset and UUID bit-layout (never exact bytes, since both sides draw independent CSPRNGs); 100% coverage, gofmt + go vet clean, green across all six 64-bit Go arches and three OSes."
